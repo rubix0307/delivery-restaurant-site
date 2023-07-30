@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="auth">
+        <h1>Вход</h1>
+        <form method="post" action="{{ url_for('user_sign_in') }}">
+
+            <input type="tel" placeholder="Телефон +380 YY XXX XX XX" name="phone" pattern="\+380\d{2}\d{3}\d{2}\d{2}" title="Введите номер в формате: +380 YY XXX XX XX">
+            <input type="password" placeholder="Введите пароль" name="password1">
+
+            <button type="submit">Войти</button>
+        </form>
+        <div class="aunt-actions">
+            <a href="">Забыли пароль?</a>
+            <a href="{{ url_for('user_register') }}">Нет аккаунта?</a>
+        </div>
+
+        {% if get_flashed_messages() %}
+            <ul class="form-messages">
+              {% for category, message in get_flashed_messages(True) %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+
+    </section>
+{% endblock %}
