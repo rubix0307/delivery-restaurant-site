@@ -1,0 +1,61 @@
+user_roles = [
+    {'name': 'Пользователь'},
+    {'name': 'Админ'},
+    {'name': 'Касир'},
+    {'name': 'Кухня'}
+]
+ratings_data = [
+    {'name': 'Ужасно', 'value': 1},
+    {'name': 'Плохо', 'value': 2},
+    {'name': 'Средне', 'value': 3},
+    {'name': 'Хорошо', 'value': 4},
+    {'name': 'Отлично', 'value': 5}
+]
+
+with app.app_context():
+    for role_info in user_roles:
+        role = UserRole(**role_info)
+        db.session.add(role)
+    db.session.commit()
+
+    for rating_info in ratings_data:
+        rating = Rating(**rating_info)
+        db.session.add(rating)
+    db.session.commit()
+
+
+
+
+
+all_products = []
+for category in categories:
+    print()
+    products = get_products_by_category(category=category.photo.split('=')[-1], category_id=category.id)
+    all_products += products
+
+
+with app.app_context():
+    for product in all_products:
+        dish = Dish(**product)
+        db.session.add(dish)
+    db.session.commit()
+
+
+
+
+
+
+
+
+
+
+
+
+categories = Category.query.all()
+    for category in categories[1:]:
+        products = get_products_by_category(category.slug, category_id=category.id)
+        for product in products:
+            dish = Dish(**product)
+            db.session.add(dish)
+        db.session.commit()
+        print(())

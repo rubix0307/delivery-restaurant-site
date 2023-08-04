@@ -1,0 +1,7 @@
+<div class="sticky">
+    <form class="main-search" method="get" action="{{ url_for('menu_search') }}">
+        <input placeholder="Искать в Вилки Палки" name="search_query"  {% if search_query %}value="{{ search_query }}"{% endif %}>
+        <button type="submit" class="magnifying-glass">🔍</button>
+    </form>
+    <div class="menu">Меню</div>
+</div>

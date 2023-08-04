@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="product">
+    <div class="title">{{ product.name }}</div>
+    <ul class="parametrs">
+        <li>Вес: {{ product.weight }} грамм</li>
+        <li>Ккал: {{ product.calories }}</li>
+        <li>Белки: {{ product.protein }} грамм</li>
+        <li>Жиров: {{ product.fat }} грамм</li>
+        <li>Углеводов: {{ product.carbohydrates }}</li>
+    </ul>
+</section>
+{% endblock %}
