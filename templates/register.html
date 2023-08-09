@@ -4,11 +4,12 @@
     <section class="auth">
         <h1>{{ title }}</h1>
         <form method="post" action="{{ url_for('user_register') }}">
-            <input type="text" placeholder="Имя" name="first-name">
-            <input type="email" placeholder="Email" name="email">
-            <input type="tel" placeholder="Телефон +380 YY XXX XX XX" name="phone" pattern="(\+?3?8?0?)?[\s-]?\d{2}[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}" title="Введите номер в формате: +380 YY XXX XX XX">
-            <input type="password" placeholder="Введите пароль" name="password1">
-            <input type="password" placeholder="Подтвердите пароль" name="password2">
+
+            <input type="text" placeholder="Имя" name="name" {% if name %}value="{{ name }}"{% endif %}>
+            <input type="email" placeholder="Email" name="email" {% if email %}value="{{ email }}"{% endif %}>
+            <input type="tel" placeholder="Телефон +380 YY XXX XX XX" name="phone" {% if phone %}value="{{ phone }}"{% endif %}>
+            <input type="password" placeholder="Введите пароль" name="password1" {% if password1 %}value="{{ password1 }}"{% endif %}>
+            <input type="password" placeholder="Подтвердите пароль" name="password2" {% if password2 %}value="{{ password2 }}"{% endif %}>
 
             <button type="submit">Зарегистрироваться</button>
         </form>

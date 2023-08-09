@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="user-profile">
+    <h1>{{ title }}</h1>
+        <form class="data-form" method="post" action="{{ url_for('user') }}">
+
+            <label class='profile-name' for="name">Тебя зовут:</label>
+            <input class='profile-name' name="name" type="text" value="{{ user.name }}">
+
+            <label class='profile-phone' for="phone">Твой телефон:</label>
+            <input class='profile-phone' name="phone" type="text" value="{{ user.phone }}">
+
+            <label class='profile-email' for="email">Твоя почта:</label>
+            <input class='profile-email' name="email" type="email" value="{{ user.email }}">
+
+            <label class='profile-password' for="password">Твой пароль:</label>
+            <input class='profile-password' name="password" type="password" value="">
+
+            <label class='profile-telegram_id' for="telegram_id">Твой телеграм:</label>
+            <input class='profile-telegram_id' name="telegram_id" type="text" value="{{ user.telegram_id }}">
+
+            <button>Изменить</button>
+        </form>
+    </section>
+{% endblock %}

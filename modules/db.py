@@ -28,12 +28,13 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    salt = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     telegram_id = db.Column(db.String(50))
-    role_id = db.Column(db.Integer, db.ForeignKey('user_role.id'), nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('user_role.id'), nullable=False, default=1)
 
 
-class Address(db.Model):
+class UserAddress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(100), nullable=False)
     street = db.Column(db.String(100), nullable=False)
@@ -41,6 +42,7 @@ class Address(db.Model):
     apartment = db.Column(db.String(20))
     entrance = db.Column(db.String(10))
     floor = db.Column(db.String(10))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class Rating(db.Model):

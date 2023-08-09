@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="user-address">
+        <h1>{{ title }}</h1>
+
+        {% if user_address_list %}
+            <ul class="address-list">
+                {% for address in user_address_list %}
+                    <li class="address">
+                        <ul>
+                            <li><div class="title">Город: </div><div class="value">{{ address.city }}</div></li>
+                            <li><div class="title">Улица: </div><div class="value">{{ address.street }}</div></li>
+                            <li><div class="title">Дом: </div><div class="value">{{ address.house }}</div></li>
+
+                            {% if address.apartment %}
+                                <li><div class="title">Квартира: </div><div class="value">{{ address.apartment }}</div></li>
+                            {% endif %}
+                            {% if address.entrance %}
+                                <li><div class="title">Подъезд: </div><div class="value">{{ address.entrance }}</div></li>
+                            {% endif %}
+                            {% if address.floor %}
+                                <li><div class="title">Этаж: </div><div class="value">{{ address.floor }}</div></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h2>Нет адресов доставки</h2>
+        {% endif %}
+
+
+        <h2>Добавить адрес</h2>
+        <form class="data-form" method="post" action="{{ url_for('user_address_list') }}">
+
+                <input required class='address-city' name="city" placeholder="Город" type="text"{% if city %} value="{{ city }}" {% else %} value="Одесса"{% endif %}>
+                <input required class='address-street' name="street" placeholder="Улица" type="text" {% if street %} value="{{ street }}" {% endif %}>
+                <input required class='address-house' name="house" placeholder="Дом" type="text" {% if house %} value="{{ house }}" {% endif %}>
+                <input class='address-apartment' name="apartment" placeholder="Квартира" type="text" {% if apartment %} value="{{ apartment }}" {% endif %}>
+                <input class='address-entrance' name="entrance" placeholder="Подъезд" type="text" {% if entrance %} value="{{ entrance }}" {% endif %}>
+                <input class='address-floor' name="floor" placeholder="Этаж" type="text" {% if floor %} value="{{ floor }}" {% endif %}>
+
+                <button type="submit">Добавить</button>
+        </form>
+        {% if get_flashed_messages() %}
+            <ul class="form-messages">
+              {% for category, message in get_flashed_messages(True) %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

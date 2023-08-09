@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request
+import json
+import re
+from flask import Flask, render_template, request, session, redirect, flash, url_for
 from sqlalchemy import text
+
 import config
 from modules.db import *
-from modules.edit_text import get_normal_form
+from modules.edit_text import get_normal_form, BcryptPasswordManager
+
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -18,8 +22,14 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
     db.session.commit()
-    dishes = Dish.query.all()
 
+default_time_values = {
+    'name': 'Артем',
+    'phone': '380660000000',
+    'email': 'miroshnichenkoartem0307@gmail.com',
+    'password1': '123456',
+    'password2': '123456',
+}
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -43,35 +53,117 @@ def cart_add():
 
 @app.route('/user', methods=['GET', 'PUT', 'DELETE'])
 def user():
-    return render_template('base.html')
+    if not session.get('user'):
+        return redirect(url_for('user_sign_in'))
+
+    contex = dict(
+        title='Твой аккаунт',
+        hide_account_menu=1,
+        user=User.query.filter_by(id=session.get('user')).first()
+    )
+    return render_template('user.html', **contex)
 
 
 @app.route('/user/register', methods=['GET','POST'])
 def user_register():
-    context = {
-        'title': 'Регистрация на сайте',
-        'hide_account_menu': True,
-    }
+    if session.get('user'):
+        return redirect(url_for('user'))
+
+    context = dict(
+        title='Регистрация на сайте',
+        hide_account_menu=1,
+    )
+
+    if request.method == 'POST':
+
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = re.sub(r'\D', '', request.form.get('phone',''))
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        context.update(dict(**request.form))
+        context.update(dict(password1='', password2=''))
+
+        if not all([name, email, phone, password1, password2]):
+            flash('Заполнены не все поля', 'error')
+            return render_template('register.html', **context)
+
+        if password1 != password2:
+            flash('Пароли не совпадают', 'error')
+            return render_template('register.html', **context)
+
+        existing_user = User.query.filter_by(phone=phone).first()
+        if existing_user:
+            flash('Пользователь с таким номером телефона уже существует', 'error')
+            return render_template('register.html', **context)
+
+        salt, hashed_password = BcryptPasswordManager(password1).hash_password()
+        new_user = User(
+            name=name,
+            phone=phone,
+            email=email,
+            salt=salt,
+            password=hashed_password,
+            role_id=1,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Вы успешно зарегистрированы', 'success')
+        return render_template('sing-in.html', **context)
+
     return render_template('register.html', **context)
 
 
 @app.route('/user/sign_in', methods=['GET','POST'])
 def user_sign_in():
-    context = {
-        'title': 'Вход в аккаунт',
-        'hide_account_menu': True,
-    }
+    if session.get('user'):
+        return redirect(url_for('user'))
+
+    context = dict(
+        title='Вход в аккаунт',
+        hide_account_menu=1,
+    )
+
+    if request.method == 'POST':
+        phone = re.sub(r'\D', '', request.form.get('phone',''))
+        password1 = request.form.get('password1')
+        context.update(dict(phone=phone))
+
+        existing_user = User.query.filter_by(phone=phone).first()
+        if existing_user:
+            if BcryptPasswordManager(password1, existing_user.salt, existing_user.password).password_check():
+                session['user'] = existing_user.id
+                return redirect(url_for('user'))
+            flash('Введенный пароль не является корректным', 'error')
+        else:
+            flash('Пользователь с таким номером телефона не существует', 'error')
+
     return render_template('sing-in.html', **context)
 
 
-@app.route('/user/logout', methods=['POST'])
+@app.route('/user/logout', methods=['GET'])
 def user_logout():
-    return
+    del session['user']
+    return redirect(url_for('menu'))
 
 
-@app.route('/user/restore', methods=['POST'])
+@app.route('/user/restore', methods=['GET', 'POST'])
 def user_restore():
-    return
+    context = dict(
+        title='Восстановление пароля',
+    )
+
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if email:
+            # email logic ...
+            flash('Мы отправили письмо на вашу почту', 'success')
+        else:
+            flash('Почта должна быть указана', 'error')
+
+    return render_template('user_restore.html', **context)
 
 
 @app.route('/user/orders', methods=['GET'])
@@ -86,7 +178,42 @@ def user_order_id(order_id):
 
 @app.route('/user/address', methods=['GET', 'POST'])
 def user_address_list():
-    return render_template('base.html')
+    if not session.get('user'):
+        return redirect(url_for('user_sign_in'))
+
+    context = dict(
+        title='Твои адреса',
+    )
+
+    if request.method == 'POST':
+        city = request.form.get('city')
+        street = request.form.get('street')
+        house = request.form.get('house')
+        apartment = request.form.get('apartment', 0)
+        entrance = request.form.get('entrance', 0)
+        floor = request.form.get('floor', 0)
+
+        if city and street and house:
+            new_address = UserAddress(
+                city=city,
+                street=street,
+                house=house,
+                apartment=apartment,
+                entrance=entrance,
+                floor=floor,
+                user_id=session.get('user'),
+            )
+            db.session.add(new_address)
+            db.session.commit()
+        else:
+            flash('Вы ввели не все обязательные поля', 'error')
+            context.update(**request.form)
+
+    context.update(dict(
+        user_address_list=db.session.query(UserAddress).filter(UserAddress.user_id == session.get('user')).all(),
+    ))
+
+    return render_template('user_address_list.html', **context)
 
 
 @app.route('/user/address/<address_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -98,7 +225,7 @@ def user_address(address_id):
 def menu():
     context = dict(
         categories=Category.query.all(),
-        products=Dish.query.order_by('category_id').all(),
+        products=db.session.query(Dish, Category).join(Category).order_by('category_id').all(),
     )
 
     return render_template('menu.html', **context)
@@ -106,9 +233,7 @@ def menu():
 
 @app.route('/menu/<category_slug>', methods=['GET'])
 def menu_category(category_slug):
-    category = Category.query.filter_by(slug=category_slug).first()
-    products = Dish.query.filter_by(category_id=category.id).all()
-
+    products = db.session.query(Dish, Category).join(Category).filter(Category.slug == category_slug).order_by('category_id').all()
     context = dict(
         categories=Category.query.all(),
         products=products,
@@ -119,7 +244,7 @@ def menu_category(category_slug):
 
 @app.route('/menu/<category_slug>/<dish_slug>', methods=['GET'])
 def menu_dish(category_slug, dish_slug):
-    product = Dish.query.filter_by(category_id=category_slug, slug=dish_slug).first()
+    product = db.session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
     context = dict(
         categories=Category.query.all(),
         product=product,
@@ -137,9 +262,13 @@ def menu_search():
     search_query = request.args.get('search_query', '').strip()
     search_query_normal = get_normal_form(search_query)
 
-    print(f'{search_query=}\n{search_query_normal=}')
+    products = db.session.query(Dish, Category)\
+        .join(Category)\
+        .filter(text('name_normal LIKE :search_query_normal'))\
+        .params(search_query_normal=f'%{search_query_normal}%')\
+        .order_by('category_id')\
+        .all()
 
-    products = Dish.query.filter(text('name_normal LIKE :search_query_normal')).params(search_query_normal=f'%{search_query_normal}%').all()
     context = dict(
         categories=Category.query.all(),
         products=products,
@@ -183,5 +312,4 @@ def admin_search():
 
 
 if __name__ == '__main__':
-    print(123)
     app.run(host='0.0.0.0', debug=True)

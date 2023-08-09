@@ -1,14 +1,12 @@
 <section class="feed">
 
     {% for product in products %}
-        <a class="" href="{{ url_for('menu_dish', category_slug=product.category_id, dish_slug=product.slug) }}">
+        <a class="" href="{{ url_for('menu_dish', category_slug=product.Category.slug, dish_slug=product.Dish.slug) }}">
 
 
             <article class="category-card">
-              <div class="title">{{ product.name }}</div>
-              <div class="image-and-arrow">
-                  <img src="{{ product.photo }}" alt="">
-              </div>
+                <img src="{{ product.Dish.photo }}" alt="">
+                <div class="title">{{ product.Dish.name }}</div>
             </article>
         </a>
     {% endfor %}
