@@ -277,19 +277,19 @@ def menu_dish(category_slug, dish_slug):
 
     if request.method == 'POST':
 
-        product.name = request.form.get('name')
+        product.name = request.form.get('name', product.name)
         product.name_normal = get_normal_form(product.name)
-        product.slug = request.form.get('slug') # and update slug, but there is no slug function yet
-        product.price = request.form.get('price')
-        product.description = request.form.get('description')
-        product.category_id = request.form.get('category_id')
-        product.available = request.form.get('available')
-        product.photo = request.form.get('photo')
-        product.weight = request.form.get('weight')
-        product.calories = request.form.get('calories')
-        product.protein = request.form.get('protein')
-        product.fat = request.form.get('fat')
-        product.carbohydrates = request.form.get('carbohydrates')
+        product.slug = request.form.get('slug') # and update slug, but there is no slug function ye, product.slugt
+        product.price = request.form.get('price', product.price)
+        product.description = request.form.get('description', product.description)
+        product.category_id = request.form.get('category_id', product.category_id)
+        product.available = request.form.get('available', product.available)
+        product.photo = request.form.get('photo', product.photo)
+        product.weight = request.form.get('weight', product.weight)
+        product.calories = request.form.get('calories', product.calories)
+        product.protein = request.form.get('protein', product.protein)
+        product.fat = request.form.get('fat', product.fat)
+        product.carbohydrates = request.form.get('carbohydrates', product.carbohydrates)
 
         db.session.commit()
 
