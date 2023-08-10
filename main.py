@@ -168,12 +168,29 @@ def user_restore():
 
 @app.route('/user/orders', methods=['GET'])
 def user_orders():
-    return render_template('base.html')
+    if not session.get('user'):
+        return redirect(url_for('user_sign_in'))
+
+    context = dict(
+        title='Твои заказы',
+        orders=Order.query.filter_by(user_id=session.get('user')).order_by('id').all()
+    )
+
+    return render_template('base.html', **context)
 
 
 @app.route('/user/orders/<order_id>', methods=['GET'])
 def user_order_id(order_id):
-    return render_template('base.html')
+    if not session.get('user'):
+        return redirect(url_for('user_sign_in'))
+
+    context = dict(
+        title='Твой заказ',
+        order=Order.query.filter_by(id=order_id, user_id=session.get('user')).first()
+    )
+
+    return render_template('base.html', **context)
+
 
 
 @app.route('/user/address', methods=['GET', 'POST'])
@@ -210,7 +227,7 @@ def user_address_list():
             context.update(**request.form)
 
     context.update(dict(
-        user_address_list=db.session.query(UserAddress).filter(UserAddress.user_id == session.get('user')).all(),
+        user_address_list=UserAddress.query.filter_by(user_id=session.get('user')).all()
     ))
 
     return render_template('user_address_list.html', **context)
@@ -218,7 +235,15 @@ def user_address_list():
 
 @app.route('/user/address/<address_id>', methods=['GET', 'PUT', 'DELETE'])
 def user_address(address_id):
-    return render_template('base.html')
+    if not session.get('user'):
+        return redirect(url_for('user_sign_in'))
+
+    context = dict(
+        title='Твой адрес',
+        addess=UserAddress.query.filter_by(id=address_id, user_id=session.get('user')).first()
+    )
+
+    return render_template('base.html', **context)
 
 @app.route('/', methods=['GET'])
 @app.route('/menu', methods=['GET'])
@@ -242,19 +267,28 @@ def menu_category(category_slug):
     return render_template('menu.html', **context)
 
 
-@app.route('/menu/<category_slug>/<dish_slug>', methods=['GET'])
+@app.route('/menu/<category_slug>/<dish_slug>', methods=['GET', 'POST'])
 def menu_dish(category_slug, dish_slug):
     product = db.session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
     context = dict(
         categories=Category.query.all(),
         product=product,
     )
+
+    if request.method == 'POST':
+        product_rows = product.__dir__()
+
+        for key in request.form.keys():
+            if key in product_rows:
+                new_value = request.form.get(key)
+                if new_value:
+                    setattr(product, key, new_value)
+
+        product.name_normal = get_normal_form(product.name)
+        # and update slug, but there is no slug function yet
+        db.session.commit()
+
     return render_template('product.html', **context)
-
-
-@app.route('/menu/<category_slug>/<dish_slug>/review', methods=['POST'])
-def menu_review(category_slug, dish_slug):
-    return
 
 
 @app.route('/menu/search', methods=['GET'])
