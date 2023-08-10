@@ -279,7 +279,7 @@ def menu_dish(category_slug, dish_slug):
 
         product.name = request.form.get('name', product.name)
         product.name_normal = get_normal_form(product.name)
-        product.slug = request.form.get('slug') # and update slug, but there is no slug function ye, product.slugt
+        product.slug = request.form.get('slug', product.slug) # and update slug, but there is no slug function ye, product.slugt
         product.price = request.form.get('price', product.price)
         product.description = request.form.get('description', product.description)
         product.category_id = request.form.get('category_id', product.category_id)
