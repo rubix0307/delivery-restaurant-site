@@ -284,7 +284,7 @@ def menu_dish(category_slug, dish_slug):
         product.description = request.form.get('description', product.description)
         product.category_id = request.form.get('category_id', product.category_id)
         product.available = request.form.get('available', product.available)
-        product.photo = request.form.get('photo', product.photo)
+        product.photo = request.form.get('photo', product.photo) # save photo and set path
         product.weight = request.form.get('weight', product.weight)
         product.calories = request.form.get('calories', product.calories)
         product.protein = request.form.get('protein', product.protein)
