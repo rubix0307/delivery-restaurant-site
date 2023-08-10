@@ -2,7 +2,7 @@ import json
 import re
 from flask import Flask, render_template, request, session, redirect, flash, url_for
 from sqlalchemy import text
-
+import inspect
 import config
 from modules.db import *
 from modules.edit_text import get_normal_form, BcryptPasswordManager
@@ -276,16 +276,21 @@ def menu_dish(category_slug, dish_slug):
     )
 
     if request.method == 'POST':
-        product_rows = product.__dir__()
 
-        for key in request.form.keys():
-            if key in product_rows:
-                new_value = request.form.get(key)
-                if new_value:
-                    setattr(product, key, new_value)
-
+        product.name = request.form.get('name')
         product.name_normal = get_normal_form(product.name)
-        # and update slug, but there is no slug function yet
+        product.slug = request.form.get('slug') # and update slug, but there is no slug function yet
+        product.price = request.form.get('price')
+        product.description = request.form.get('description')
+        product.category_id = request.form.get('category_id')
+        product.available = request.form.get('available')
+        product.photo = request.form.get('photo')
+        product.weight = request.form.get('weight')
+        product.calories = request.form.get('calories')
+        product.protein = request.form.get('protein')
+        product.fat = request.form.get('fat')
+        product.carbohydrates = request.form.get('carbohydrates')
+
         db.session.commit()
 
     return render_template('product.html', **context)
