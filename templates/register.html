@@ -3,7 +3,7 @@
 {% block content %}
     <section class="auth">
         <h1>{{ title }}</h1>
-        <form method="post" action="{{ url_for('user_register') }}">
+        <form method="post" action="{{ url_for('user.user_register') }}">
 
             <input type="text" placeholder="Имя" name="name" {% if name %}value="{{ name }}"{% endif %}>
             <input type="email" placeholder="Email" name="email" {% if email %}value="{{ email }}"{% endif %}>
@@ -15,7 +15,7 @@
         </form>
 
         <div class="aunt-actions">
-            <a href="{{ url_for('user_sign_in') }}">Есть аккаунт?</a>
+            <a href="{{ url_for('user.user_login') }}">Есть аккаунт?</a>
         </div>
 
         {% if get_flashed_messages() %}

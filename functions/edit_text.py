@@ -1,5 +1,8 @@
+import json
+
 import pymorphy2
 import bcrypt
+from flask import session
 
 
 morph = pymorphy2.MorphAnalyzer()
@@ -43,3 +46,7 @@ class BcryptPasswordManager:
 
         hashed_password_check = bcrypt.hashpw(self.password.encode('utf-8'), self.salt.encode('utf-8')).decode('utf-8')
         return self.hashed_password == hashed_password_check
+
+
+def get_session_user_data():
+    return json.loads(session['user'])

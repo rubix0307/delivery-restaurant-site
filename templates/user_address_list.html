@@ -32,7 +32,7 @@
 
 
         <h2>Добавить адрес</h2>
-        <form class="data-form" method="post" action="{{ url_for('user_address_list') }}">
+        <form class="data-form" method="post" action="{{ url_for('user.user_address_list') }}">
 
                 <input required class='address-city' name="city" placeholder="Город" type="text"{% if city %} value="{{ city }}" {% else %} value="Одесса"{% endif %}>
                 <input required class='address-street' name="street" placeholder="Улица" type="text" {% if street %} value="{{ street }}" {% endif %}>

@@ -2,13 +2,18 @@
 
 {% block content %}
 <section class="product">
+    <img src="{{ product.photo }}" alt="">
     <div class="title">{{ product.name }}</div>
     <ul class="parametrs">
-        <li>Вес: {{ product.weight }} грамм</li>
-        <li>Ккал: {{ product.calories }}</li>
-        <li>Белки: {{ product.protein }} грамм</li>
-        <li>Жиров: {{ product.fat }} грамм</li>
-        <li>Углеводов: {{ product.carbohydrates }}</li>
+        <p>Состав порции:</p>
+        <li>Вес: <div class="value">{{ product.weight }}</div> грамм</li>
+        <li>Калории: <div class="value">{{ product.calories }}</div> ккал</li>
+        <li>Белки: <div class="value">{{ product.protein }}</div> грамм</li>
+        <li>Жиры: <div class="value">{{ product.fat }}</div> грамм</li>
+        <li>Углеводы: <div class="value">{{ product.carbohydrates }}</div> грамм</li>
+
     </ul>
+
+    <div class="description">{{ product.description }}</div>
 </section>
 {% endblock %}

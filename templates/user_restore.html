@@ -3,7 +3,7 @@
 {% block content %}
     <section class="user-restore">
     <h1>{{ title }}</h1>
-    <form class="data-form" method="post" action="{{ url_for('user_restore') }}">
+    <form class="data-form" method="post" action="{{ url_for('user.user_restore') }}">
 
         <label class='profile-phone' for="phone">Твой телефон:</label>
         <input class='profile-phone' name="phone" type="text">
@@ -13,6 +13,9 @@
 
         <button type="submit">Восстановить</button>
     </form>
+    <div class="aunt-actions">
+        <a href="{{ url_for('user.user_login') }}">Вспомнил пароль?</a>
+    </div>
     {% if get_flashed_messages() %}
         <ul class="form-messages">
           {% for category, message in get_flashed_messages(True) %}

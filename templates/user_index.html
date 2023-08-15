@@ -3,7 +3,7 @@
 {% block content %}
     <section class="user-profile">
     <h1>{{ title }}</h1>
-        <form class="data-form" method="post" action="{{ url_for('user') }}">
+        <form class="data-form" method="post" action="{{ url_for('user.user_index') }}">
 
             <label class='profile-name' for="name">Тебя зовут:</label>
             <input class='profile-name' name="name" type="text" value="{{ user.name }}">

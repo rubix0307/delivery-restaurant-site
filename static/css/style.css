@@ -84,7 +84,7 @@ h2{
 
 main {
     width: calc(100% - 20px);
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     height: 100%;
     padding: 10px;
@@ -227,7 +227,7 @@ article.category-card .title {
     background-color: #f5f5f5;
     border-radius: 20px;
     height: 50px;
-    width: 73%;
+    width: 100%;
     max-width: 980px;
     padding: 0 20px;
     /*margin: 0 auto 30px 15px;*/
@@ -493,13 +493,39 @@ section.auth form button[type="submit"]:hover {
 
 
 
+section.product img {
+    width: 100%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+section.product .title {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+section.product .description{
+    margin-top: 50px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #00000015;
+}
 
 
 
-
-
-
-
+section.product .parametrs {
+    padding: 0;
+    margin-left: 20px;
+}
+section.product .parametrs li {
+    display: flex;
+}
+section.product .parametrs li .value{
+    color: var(--tertiary-bg-color);
+    font-weight: bold;
+    margin: 0 5px;
+}
 
 
 
@@ -534,12 +560,16 @@ section.auth form button[type="submit"]:hover {
         border-radius: 0 20px 20px 0;
     }
     .main-search {
-        width: 73%;
+        width: 100%;
         border-radius:  20px 0 0 20px ;
         max-width: 100%;
         margin: 0;
     }
+    .sticky {
 
+        padding: 0 0 0 7px;
+
+    }
 
 
     article.category-card {
@@ -549,19 +579,19 @@ section.auth form button[type="submit"]:hover {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
         border-radius: 20px;
         border-color: rgba(72, 95, 110, 0.07);
         border-style: outset;
-        margin: 0 20px 10px 20px;
-        padding: 10px 0;
-
+        /* margin: 0 20px 10px 20px; */
+        /* padding: 10px 0; */
     }
     article.category-card img {
         max-width: 100%;
-        border-radius: 10px;
-        padding: 0;
+        border-radius: 20px;
+        padding: -10px;
         margin: 0;
+        margin-top: -9px;
+        z-index: 1;
     }
     article.category-card .title {
         max-width: 100%;
@@ -575,10 +605,16 @@ section.auth form button[type="submit"]:hover {
         max-width: calc(100%- 20px);
     }
 }
-@media only screen and (max-width: 367px) {
+@media only screen and (max-width: 600px) {
 
     header .title {
         margin-top: 10px;
         font-size: 16px;
+    }
+
+    article.category-card img {
+        width: 100%;
+        height: auto;
+
     }
 }

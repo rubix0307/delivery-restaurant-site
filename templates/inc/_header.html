@@ -1,11 +1,11 @@
 <header>
     <div class="part">
-        <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='imgs/logo-mini-data.png') }}" width="65px" height="100%" alt="" class="logo"></a><div class="title">Ресторан доставки</div>
+        <a href="{{ url_for('menu.menu_index') }}"><img src="{{ url_for('static', filename='imgs/logo-mini-data.png') }}" width="65px" height="100%" alt="" class="logo"></a><div class="title">Ресторан доставки</div>
     </div>
 
     {% if not hide_account_menu %}
         <div class="part">
-            <a class="log-in-btn" href="{{ url_for('user_sign_in') }}">Вход</a>
+            <a class="log-in-btn" href="{{ url_for('user.user_login') }}">Вход</a>
         </div>
     {% endif %}
 </header>

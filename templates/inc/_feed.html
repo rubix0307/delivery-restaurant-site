@@ -1,7 +1,7 @@
 <section class="feed">
 
     {% for product in products %}
-        <a class="" href="{{ url_for('menu_dish', category_slug=product.Category.slug, dish_slug=product.Dish.slug) }}">
+        <a class="" href="{{ url_for('menu.menu_dish', category_slug=product.Category.slug, dish_slug=product.Dish.slug) }}">
 
 
             <article class="category-card">

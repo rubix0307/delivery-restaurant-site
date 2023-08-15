@@ -2,7 +2,7 @@
     <ul class="nav">
         <a href="" class="title">Разделы</a>
         {% for category in categories %}
-            <a href="{{ url_for('menu_category', category_slug=category.slug) }}">
+            <a href="{{ url_for('menu.menu_category', category_slug=category.slug) }}">
                 <li>{{ category.name }}</li>
             </a>
         {% endfor %}
