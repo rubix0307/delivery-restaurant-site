@@ -1,10 +1,11 @@
+import os
+
 from sqlalchemy import text
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for
 
 from functions.db import db, Category, Dish
 from functions.edit_text import get_normal_form
-
-
+from functions.send_email import SendEmail
 menu = Blueprint('menu', __name__)
 
 
@@ -18,7 +19,7 @@ def menu_index():
     return render_template('menu.html', **context)
 
 
-@menu.route('/menu/<category_slug>', methods=['GET'])
+@menu.route('/<category_slug>', methods=['GET'])
 def menu_category(category_slug):
     products = db.session.query(Dish, Category).join(Category).filter(Category.slug == category_slug).order_by('category_id').all()
     context = dict(
@@ -29,7 +30,7 @@ def menu_category(category_slug):
     return render_template('menu.html', **context)
 
 
-@menu.route('/menu/<category_slug>/<dish_slug>', methods=['GET', 'POST'])
+@menu.route('/<category_slug>/<dish_slug>', methods=['GET', 'POST'])
 def menu_dish(category_slug, dish_slug):
     product = db.session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
     context = dict(
@@ -58,7 +59,7 @@ def menu_dish(category_slug, dish_slug):
     return render_template('product.html', **context)
 
 
-@menu.route('/menu/search', methods=['GET'])
+@menu.route('/search', methods=['GET'])
 def menu_search():
     search_query = request.args.get('search_query', '').strip()
     search_query_normal = get_normal_form(search_query)
@@ -77,3 +78,23 @@ def menu_search():
     )
 
     return render_template('menu.html', **context)
+
+
+@menu.route('/test_send_email', methods=['GET'])
+def test_send_email():
+
+    product = db.session.query(Dish, Category)\
+        .join(Category)\
+        .all()
+
+    path = os.getcwd() + url_for('static', filename='css/style.css').replace('/', '\\')
+    css = open(path, 'r').read()
+    context = dict(
+        receiver_email="delivery.restaurant.site@gmail.com",
+        subject='Тема письма',
+        message_html=render_template('update_order_status.html', product=product[0], css=css)
+    )
+    open('text.html','w', encoding='UTF-8').write(context['message_html'])
+    with SendEmail(**context) as email:
+        is_send = email.send()
+    return context['message_html']
