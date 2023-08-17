@@ -3,7 +3,7 @@ import re
 
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 
-from functions import decorators as d
+from functions.decorators import login_required, logout_required
 from functions.db import UserAddress, db, User, Order
 from functions.edit_text import get_session_user_data, BcryptPasswordManager
 
@@ -12,7 +12,7 @@ user = Blueprint('user', __name__)
 
 
 @user.route('/', methods=['GET', 'PUT', 'DELETE'])
-@d.login_required()
+@login_required()
 def user_index():
     user = get_session_user_data()
     contex = dict(
@@ -24,7 +24,7 @@ def user_index():
 
 
 @user.route('/register', methods=['GET','POST'])
-@d.logout_required()
+@logout_required()
 def user_register():
     context = dict(
         title='Регистрация на сайте',
@@ -74,7 +74,7 @@ def user_register():
 
 
 @user.route('/login', methods=['GET','POST'])
-@d.logout_required()
+@logout_required()
 def user_login():
     context = dict(
         title='Вход в аккаунт',
@@ -107,7 +107,7 @@ def user_login():
 
 
 @user.route('/logout', methods=['GET'])
-@d.login_required()
+@login_required()
 def user_logout():
     del session['user']
     return redirect(url_for('menu.menu_index'))
@@ -132,7 +132,7 @@ def user_restore():
 
 
 @user.route('/orders', methods=['GET'])
-@d.login_required()
+@login_required()
 def user_orders():
     context = dict(
         title='Твои заказы',
@@ -143,7 +143,7 @@ def user_orders():
 
 
 @user.route('/orders/<order_id>', methods=['GET'])
-@d.login_required()
+@login_required()
 def user_order_id(order_id):
     context = dict(
         title='Твой заказ',
@@ -154,7 +154,7 @@ def user_order_id(order_id):
 
 
 @user.route('/address', methods=['GET', 'POST'])
-@d.login_required()
+@login_required()
 def user_address_list():
     context = dict(
         title='Твои адреса',
@@ -192,7 +192,7 @@ def user_address_list():
 
 
 @user.route('/address/<address_id>', methods=['GET', 'PUT', 'DELETE'])
-@d.login_required()
+@login_required()
 def user_address(address_id):
     context = dict(
         title='Твой адрес',
