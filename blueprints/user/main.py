@@ -5,8 +5,8 @@ from flask import Blueprint, render_template, session, redirect, url_for, flash,
 
 from functions.decorators import login_required, logout_required
 from functions.db import UserAddress, db, User, Order
-from functions.edit_text import get_session_user_data, BcryptPasswordManager
-
+from functions.edit_text import BcryptPasswordManager
+from functions.other import get_session_user_data
 
 user = Blueprint('user', __name__)
 

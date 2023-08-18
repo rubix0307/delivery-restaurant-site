@@ -4,7 +4,7 @@ from sqlalchemy import text
 from flask import Blueprint, render_template, request, url_for
 
 from functions.db import db, Category, Dish
-from functions.edit_text import get_normal_form
+from functions.edit_text import get_normal_form, create_slug
 from functions.send_email import SendEmail
 menu = Blueprint('menu', __name__)
 
@@ -42,7 +42,7 @@ def menu_dish(category_slug, dish_slug):
 
         product.name = request.form.get('name', product.name)
         product.name_normal = get_normal_form(product.name)
-        product.slug = request.form.get('slug', product.slug) # and update slug, but there is no slug function ye, product.slugt
+        product.slug = create_slug(product.name)
         product.price = request.form.get('price', product.price)
         product.description = request.form.get('description', product.description)
         product.category_id = request.form.get('category_id', product.category_id)

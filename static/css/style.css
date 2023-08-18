@@ -530,12 +530,73 @@ section.product .parametrs li .value{
 
 
 
+section.forms {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+}
+section.forms form {
+    max-width: 320px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    border: 2px rgba(72, 95, 110, 0.3) outset;
+    border-radius: 20px;
+    padding: 10px 10px 5px 10px;
+    margin: 0 auto 5px auto;
 
+}
+section.forms form .title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 15px
+}
+section.forms form label {
+    padding: 0;
+    margin: 0 10px 0 0;
+}
+section.forms form select,
+section.forms form input {
+    padding: 0;
+    margin: 5px 0;
+    min-height: 20px;
+    font-size: 16px;
+    border: 2px rgba(72, 95, 110, 0.3) outset;
+    border-radius: 10px;
+}
+section.forms form input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+}
+section.forms form input[type='submit'] {
+    height: 30px;
+    margin: 5px 0;
+    color: var(--secondary-color);
+    background-color: var(--tertiary-bg-color);
 
+    border: 2px rgba(72, 95, 110, 0.3) outset;
+    border-radius: 10px;
 
+}
+section.forms form input[type='submit']:hover {
+    background-color: var(--tertiary-bg-color-hover);
+}
 
-
-
+section.forms form input[type='button'] {
+    height: 20px;
+    margin: 10px 0;
+    padding: 0;
+}
+section.forms form .row {
+    display: flex;
+    flex-direction: row;
+    margin: 5px 0;
+    align-items: center;
+}
 
 
 @media only screen and (max-width: 880px) {

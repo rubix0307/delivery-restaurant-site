@@ -1,5 +1,6 @@
 import json
-
+from transliterate import translit
+import re
 import pymorphy2
 import bcrypt
 from flask import session
@@ -48,5 +49,8 @@ class BcryptPasswordManager:
         return self.hashed_password == hashed_password_check
 
 
-def get_session_user_data():
-    return json.loads(session['user'])
+def create_slug(text: str) -> str:
+    transliterated_text = translit(text, 'ru', reversed=True)
+    slug = re.sub(r'[^\w\s-]', '', transliterated_text).strip().lower()
+    slug = re.sub(r'[-\s]+', '-', slug)
+    return slug
