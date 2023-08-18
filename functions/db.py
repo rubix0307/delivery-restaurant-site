@@ -89,3 +89,14 @@ class DishRating(db.Model):
 class UserRole(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+
+
+def get_or_create(model, filters):
+    data = model.query.filter_by(**filters).first()
+
+    if not data:
+        data = model(**filters)
+        db.session.add(data)
+        db.session.commit()
+
+    return data

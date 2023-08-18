@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, url_for
 
 from functions.db import db, Category, Dish
 from functions.edit_text import get_normal_form, create_slug
+from functions.other import get_user_cart_orders
 from functions.send_email import SendEmail
 menu = Blueprint('menu', __name__)
 
@@ -82,19 +83,14 @@ def menu_search():
 
 @menu.route('/test_send_email', methods=['GET'])
 def test_send_email():
+    user, cart, order = get_user_cart_orders()
 
-    product = db.session.query(Dish, Category)\
-        .join(Category)\
-        .all()
-
-    path = os.getcwd() + url_for('static', filename='css/style.css').replace('/', '\\')
-    css = open(path, 'r').read()
     context = dict(
         receiver_email="delivery.restaurant.site@gmail.com",
         subject='Тема письма',
-        message_html=render_template('update_order_status.html', product=product[0], css=css)
+        message_html=render_template('update_order_status.html', order=order),
     )
-    open('text.html','w', encoding='UTF-8').write(context['message_html'])
+
     with SendEmail(**context) as email:
         is_send = email.send()
     return context['message_html']
