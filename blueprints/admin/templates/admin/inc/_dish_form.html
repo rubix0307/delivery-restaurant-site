@@ -1,0 +1,46 @@
+<form action="{{ url_for('admin.admin_dishes') }}" method="post" enctype="multipart/form-data">
+    <div class="title">Добавить товар</div>
+
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="price">Цена:</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="category">Категория:</label>
+    <select id="category" name="category_id" required>
+        {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="row">
+        <label for="available">В наличии:</label>
+        <input type="checkbox" id="available" name="available">
+    </div>
+
+    <div class="row">
+        <label for="photo">Фото:</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
+    </div>
+
+    <label for="weight">Вес:</label>
+    <input type="number" id="weight" name="weight">
+
+    <label for="calories">Калории:</label>
+    <input type="number" id="calories" name="calories">
+
+    <label for="protein">Белки:</label>
+    <input type="number" id="protein" name="protein">
+
+    <label for="fat">Жиры:</label>
+    <input type="number" id="fat" name="fat">
+
+    <label for="carbohydrates">Углеводы:</label>
+    <input type="number" id="carbohydrates" name="carbohydrates">
+
+    <input type="submit" value="Добавить товар">
+</form>

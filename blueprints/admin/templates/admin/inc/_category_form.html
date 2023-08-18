@@ -1,0 +1,13 @@
+<form action="{{ url_for('admin.admin_categories') }}" method="post" enctype="multipart/form-data">
+    <div class="title">Добавить категорию</div>
+
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" required>
+
+    <div class="row">
+        <label for="photo">Фото:</label>
+        <input type="file" id="photo" name="photo">
+    </div>
+
+    <input type="submit" value="Добавить категорию">
+</form>
