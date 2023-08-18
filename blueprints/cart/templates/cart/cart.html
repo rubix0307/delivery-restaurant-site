@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="current_order">
+        <h2>Твоя корзинка</h2>
+
+        {% if order %}
+            <ul class="cart-products">
+                {% for product, quantity in order %}
+                    <li class="cart-product">
+                        <img src="{{ product.photo }}" alt="">
+                        <div>
+                            <h3>{{ product.name }} x{{ quantity }}</h3>
+                            <div class="price">{{ product.price }} за позицию</div>
+                            {% if product.price != product.price * quantity %}
+                                <div class="price_total">{{ product.price * quantity }}</div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h3 style="text-align: center;">пустая</h3>
+            <a href="{{ url_for('menu.menu_index') }}" style="text-align: center;">К покупкам!</a>
+        {% endif %}
+
+    </div>
+{% endblock %}

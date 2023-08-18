@@ -3,7 +3,7 @@ from flask import Blueprint, render_template
 from functions.decorators import login_required
 from functions.other import get_user_cart_orders
 
-cart = Blueprint('cart', __name__)
+cart = Blueprint('cart', __name__, template_folder='templates')
 
 
 @cart.route('/', methods=['GET', 'PUT'])
@@ -11,13 +11,22 @@ cart = Blueprint('cart', __name__)
 def cart_index():
     user, cart, order = get_user_cart_orders()
 
-    return render_template('base.html')
+    context = dict(
+        user=user,
+        cart=cart,
+        order=order,
+    )
+
+    return render_template('cart/cart.html', **context)
 
 
 @cart.route('/order', methods=['POST'])
 @login_required()
 def cart_order():
     user, cart, order = get_user_cart_orders()
+
+
+
     return
 
 

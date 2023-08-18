@@ -598,6 +598,38 @@ section.forms form .row {
     align-items: center;
 }
 
+.current_order {
+    max-width: 100%;
+}
+
+
+.current_order .cart-products {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+
+}
+
+.current_order .cart-products .cart-product{
+    list-style: none;
+    margin-bottom: 30px;
+    border: 2px #a39494 solid;
+    border-radius: 20px;
+    padding: 10px;
+}
+.current_order .cart-products .cart-product h3{
+    text-align: center;
+    margin: 0;
+    font-size: 20px;
+}
+.current_order .cart-products .cart-product img{
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+
+
+
 
 @media only screen and (max-width: 880px) {
     header .part .logo {

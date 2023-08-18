@@ -86,7 +86,7 @@ def test_send_email():
     user, cart, order = get_user_cart_orders()
 
     context = dict(
-        receiver_email="delivery.restaurant.site@gmail.com",
+        receiver_email="miroshnichenkoartem0307@gmail.com",
         subject='Тема письма',
         message_html=render_template('update_order_status.html', order=order),
     )

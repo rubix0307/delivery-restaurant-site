@@ -59,16 +59,16 @@ class OrderStatus(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
+    address_id = db.Column(db.Integer, db.ForeignKey('user_address.id'), nullable=True)
     status_id = db.Column(db.Integer, db.ForeignKey('order_status.id'), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    calories = db.Column(db.Float)
-    protein = db.Column(db.Float)
-    fat = db.Column(db.Float)
-    carbohydrates = db.Column(db.Float)
-    comment = db.Column(db.Text)
-    timestamp = db.Column(db.TIMESTAMP)
-    rating_id = db.Column(db.Integer, db.ForeignKey('rating.id'))
+    price = db.Column(db.Float, nullable=True)
+    calories = db.Column(db.Float, nullable=True)
+    protein = db.Column(db.Float, nullable=True)
+    fat = db.Column(db.Float, nullable=True)
+    carbohydrates = db.Column(db.Float, nullable=True)
+    comment = db.Column(db.Text, nullable=True)
+    timestamp = db.Column(db.TIMESTAMP, nullable=True)
+    rating_id = db.Column(db.Integer, db.ForeignKey('rating.id'), nullable=True)
 
 
 class OrderDish(db.Model):
