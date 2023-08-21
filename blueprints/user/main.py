@@ -90,14 +90,14 @@ def user_login():
         if search_user:
             if BcryptPasswordManager(password1, search_user.salt, search_user.password).password_check():
 
-                session['user'] = json.dumps(dict(
+                session['user'] = dict(
                     id=search_user.id,
                     name=search_user.name,
                     phone=search_user.phone,
                     email=search_user.email,
                     telegram_id=search_user.telegram_id,
                     role_id=search_user.role_id,
-                ))
+                )
                 return redirect(url_for('.user_login'))
             flash('Введенный пароль не является корректным', 'error')
         else:
