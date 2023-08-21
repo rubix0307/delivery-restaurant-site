@@ -4,18 +4,13 @@ import config
 from functions.db import *
 from blueprints import admin, menu, user, cart
 
+
 app = Flask(__name__)
 app.config.update(config.app_config)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(menu, url_prefix='/menu')
 app.register_blueprint(user, url_prefix='/user')
 app.register_blueprint(cart, url_prefix='/cart')
-db.init_app(app)
-
-
-with app.app_context():
-    db.create_all()
-    db.session.commit()
 
 
 @app.errorhandler(404)

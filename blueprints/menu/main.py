@@ -3,7 +3,7 @@ import os
 from sqlalchemy import text
 from flask import Blueprint, render_template, request, url_for
 
-from functions.db import db, Category, Dish
+from functions.db import Category, Dish, db_session
 from functions.edit_text import get_normal_form, create_slug
 from functions.other import get_user_cart_orders
 from functions.send_email import SendEmail
@@ -14,7 +14,7 @@ menu = Blueprint('menu', __name__)
 def menu_index():
     context = dict(
         categories=Category.query.all(),
-        products=db.session.query(Dish, Category).join(Category).order_by('category_id').all(),
+        products=db_session.query(Dish, Category).join(Category).order_by('category_id').all(),
     )
 
     return render_template('menu.html', **context)
@@ -22,7 +22,7 @@ def menu_index():
 
 @menu.route('/<category_slug>', methods=['GET'])
 def menu_category(category_slug):
-    products = db.session.query(Dish, Category).join(Category).filter(Category.slug == category_slug).order_by('category_id').all()
+    products = db_session.query(Dish, Category).join(Category).filter(Category.slug == category_slug).order_by('category_id').all()
     context = dict(
         categories=Category.query.all(),
         products=products,
@@ -33,7 +33,7 @@ def menu_category(category_slug):
 
 @menu.route('/<category_slug>/<dish_slug>', methods=['GET', 'POST'])
 def menu_dish(category_slug, dish_slug):
-    product = db.session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
+    product = db_session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
     context = dict(
         categories=Category.query.all(),
         product=product,
@@ -55,7 +55,7 @@ def menu_dish(category_slug, dish_slug):
         product.fat = request.form.get('fat', product.fat)
         product.carbohydrates = request.form.get('carbohydrates', product.carbohydrates)
 
-        db.session.commit()
+        db_session.commit()
 
     return render_template('product.html', **context)
 
@@ -65,7 +65,7 @@ def menu_search():
     search_query = request.args.get('search_query', '').strip()
     search_query_normal = get_normal_form(search_query)
 
-    products = db.session.query(Dish, Category)\
+    products = db_session.query(Dish, Category)\
         .join(Category)\
         .filter(text('name_normal LIKE :search_query_normal'))\
         .params(search_query_normal=f'%{search_query_normal}%')\

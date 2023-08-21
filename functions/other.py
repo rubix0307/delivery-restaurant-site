@@ -5,11 +5,8 @@ from flask import session
 from functions.db import *
 
 
-def get_session_user_data():
-    return json.loads(session['user'])
-
 def get_user_cart_orders():
-    user = get_session_user_data()
+    user = session.get('user')
     cart = get_or_create(Order, dict(user_id=user['id'], status_id=1))
-    orders: Row = db.session.query(Dish, OrderDish.quantity).join(OrderDish).filter(OrderDish.order_id == cart.id).all()
+    orders: Row = db_session.query(Dish, OrderDish.quantity).join(OrderDish).filter(OrderDish.order_id == cart.id).all()
     return user, cart, orders

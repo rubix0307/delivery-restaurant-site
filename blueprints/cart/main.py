@@ -24,9 +24,6 @@ def cart_index():
 @login_required()
 def cart_order():
     user, cart, order = get_user_cart_orders()
-
-
-
     return
 
 

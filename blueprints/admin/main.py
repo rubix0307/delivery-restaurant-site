@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, url_for
-from functions.db import Dish, db, Category
+from functions.db import Dish, Category, db_session
 from functions.decorators import login_required
 from functions.edit_text import get_normal_form, create_slug
 
@@ -11,7 +11,7 @@ admin = Blueprint('admin', __name__, template_folder='templates')
 def admin_index():
     context = dict(
         categories=Category.query.all(),
-        products=db.session.query(Dish, Category).join(Category).order_by('category_id').all(),
+        products=db_session.query(Dish, Category).join(Category).order_by('category_id').all(),
     )
     return render_template('admin/admin.html', **context)
 
@@ -37,12 +37,12 @@ def admin_dishes():
         product.fat = request.form.get('fat')
         product.carbohydrates = request.form.get('carbohydrates')
 
-        db.session.add(product)
-        db.session.commit()
+        db_session.add(product)
+        db_session.commit()
 
     context = dict(
         categories=Category.query.all(),
-        products=db.session.query(Dish, Category).join(Category).order_by('category_id').all(),
+        products=db_session.query(Dish, Category).join(Category).order_by('category_id').all(),
     )
 
     return render_template('admin/admin.html', **context)
@@ -62,8 +62,8 @@ def admin_categories():
         category.slug = create_slug(category.name)
         category.photo = request.form.get('photo')  # save photo and set path
 
-        db.session.add(category)
-        db.session.commit()
+        db_session.add(category)
+        db_session.commit()
 
     context = dict()
     return render_template('admin/admin.html', **context)

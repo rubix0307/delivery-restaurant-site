@@ -4,9 +4,8 @@ import re
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 
 from functions.decorators import login_required, logout_required
-from functions.db import UserAddress, db, User, Order
+from functions.db import UserAddress, User, Order, db_session
 from functions.edit_text import BcryptPasswordManager
-from functions.other import get_session_user_data
 
 user = Blueprint('user', __name__)
 
@@ -14,7 +13,7 @@ user = Blueprint('user', __name__)
 @user.route('/', methods=['GET', 'PUT', 'DELETE'])
 @login_required()
 def user_index():
-    user = get_session_user_data()
+    user = session.get('user')
     contex = dict(
         title='Твой аккаунт',
         hide_account_menu=1,
@@ -64,8 +63,8 @@ def user_register():
             password=hashed_password,
             role_id=1,
         )
-        db.session.add(new_user)
-        db.session.commit()
+        db_session.add(new_user)
+        db_session.commit()
 
         flash('Вы успешно зарегистрированы', 'success')
         return render_template('sing-in.html', **context)
@@ -178,8 +177,8 @@ def user_address_list():
                 floor=floor,
                 user_id=session['user'].get('id'),
             )
-            db.session.add(new_address)
-            db.session.commit()
+            db_session.add(new_address)
+            db_session.commit()
         else:
             flash('Вы ввели не все обязательные поля', 'error')
             context.update(**request.form)
