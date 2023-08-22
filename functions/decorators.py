@@ -1,6 +1,6 @@
 import json
 from functools import wraps
-from flask import session, flash, redirect, url_for
+from flask import session, flash, redirect, url_for, request
 from functions.db import User
 
 
@@ -22,7 +22,7 @@ def login_required(role_ids: list[int] = [], redirect_to:str='user.user_login'):
             else:
                 flash('Авторизуйтесь для входа на эту страницу', 'error')
 
-            return redirect(url_for(redirect_to))
+            return redirect(url_for(redirect_to, next=request.path))
         return decorated_function
     return decorator
 

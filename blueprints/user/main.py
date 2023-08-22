@@ -75,9 +75,12 @@ def user_register():
 @user.route('/login', methods=['GET','POST'])
 @logout_required()
 def user_login():
+    next = request.args.get('next')
+
     context = dict(
         title='Вход в аккаунт',
         hide_account_menu=1,
+        next=next,
     )
 
     if request.method == 'POST':
@@ -97,6 +100,8 @@ def user_login():
                     telegram_id=search_user.telegram_id,
                     role_id=search_user.role_id,
                 )
+                if next:
+                    return redirect(next)
                 return redirect(url_for('.user_login'))
             flash('Введенный пароль не является корректным', 'error')
         else:

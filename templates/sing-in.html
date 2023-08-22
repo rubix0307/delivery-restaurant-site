@@ -3,7 +3,7 @@
 {% block content %}
     <section class="auth">
         <h1>Вход</h1>
-        <form method="post" action="{{ url_for('user.user_login') }}">
+        <form method="post" action="{{ url_for('user.user_login', next=next) }}">
 
             <input type="tel" placeholder="Телефон +380 YY XXX XX XX" name="phone" {% if phone %}value="{{ phone }}"{% endif %}>
             <input type="password" placeholder="Введите пароль" name="password1" {% if password1 %}value="{{ password1 }}"{% endif %}>
