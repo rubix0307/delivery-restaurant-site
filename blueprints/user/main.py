@@ -67,7 +67,7 @@ def user_register():
         db_session.commit()
 
         flash('Вы успешно зарегистрированы', 'success')
-        return render_template('sing-in.html', **context)
+        return render_template('login.html', **context)
 
     return render_template('register.html', **context)
 
@@ -107,7 +107,7 @@ def user_login():
         else:
             flash('Пользователь с таким номером телефона не существует', 'error')
 
-    return render_template('sing-in.html', **context)
+    return render_template('login.html', **context)
 
 
 @user.route('/logout', methods=['GET'])
