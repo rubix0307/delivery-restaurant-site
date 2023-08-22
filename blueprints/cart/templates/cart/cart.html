@@ -6,14 +6,14 @@
 
         {% if order %}
             <ul class="cart-products">
-                {% for product, quantity in order %}
+                {% for order_item in order %}
                     <li class="cart-product">
-                        <img src="{{ product.photo }}" alt="">
+                        <img src="{{ order_item.Dish.photo }}" alt="">
                         <div>
-                            <h3>{{ product.name }} x{{ quantity }}</h3>
-                            <div class="price">{{ product.price }} за позицию</div>
-                            {% if product.price != product.price * quantity %}
-                                <div class="price_total">{{ product.price * quantity }}</div>
+                            <h3>{{ order_item.Dish.name }} x{{ order_item.OrderDish.quantity }}</h3>
+                            <div class="price">{{ order_item.Dish.price }} за позицию</div>
+                            {% if order_item.Dish.price != order_item.Dish.price * order_item.OrderDish.quantity %}
+                                <div class="price_total">{{ order_item.Dish.price * order_item.OrderDish.quantity }}</div>
                             {% endif %}
                         </div>
                     </li>

@@ -628,8 +628,29 @@ section.forms form .row {
 }
 
 
+.cart-btn {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    background-color: var(--tertiary-bg-color);
+    border-radius: 100%;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    color: var(--main-bg-color);
+    font-weight: bold;
+    font-size: 12px;
+    position: sticky;
+    bottom: 50px;
+    margin-left: calc(100% - 200px);
+    z-index: 9999;
+    transition: 0.2s;
+}
+.cart-btn img {
+    max-width: 50px;
+    max-height: 50px;
 
-
+}
 
 @media only screen and (max-width: 880px) {
     header .part .logo {
@@ -696,6 +717,17 @@ section.forms form .row {
 
     .user-profile .data-form {
         max-width: calc(100%- 20px);
+    }
+
+    .cart-btn {
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        background-color: var(--tertiary-bg-color);
+        color: var(--main-bg-color);
+        bottom: 50px;
+        margin-left: calc(100% - 60px);
+        z-index: 9999;
     }
 }
 @media only screen and (max-width: 600px) {

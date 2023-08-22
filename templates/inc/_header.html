@@ -5,7 +5,12 @@
 
     {% if not hide_account_menu %}
         <div class="part">
-            <a class="log-in-btn" href="{{ url_for('user.user_login') }}">Вход</a>
+            <a class="log-in-btn" href="{{ url_for('user.user_login') }}">
+                {% if session.user and session.user.name %}
+                    {{ session.user.name }}
+                {% else %}
+                    Вход
+                {% endif %}</a>
         </div>
     {% endif %}
 </header>
