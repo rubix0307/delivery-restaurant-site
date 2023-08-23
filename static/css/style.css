@@ -646,6 +646,10 @@ section.forms form .row {
     z-index: 9999;
     transition: 0.2s;
 }
+.cart-btn a {
+    border-radius: 100%;
+
+}
 .cart-btn img {
     max-width: 50px;
     max-height: 50px;

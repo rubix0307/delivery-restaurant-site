@@ -2,19 +2,19 @@
 
 {% block content %}
 <section class="product">
-    <img src="{{ product.photo }}" alt="">
-    <div class="title">{{ product.name }}</div>
+    <img src="{{ product.Dish.photo }}" alt="">
+    <div class="title">{{ product.Dish.name }}</div>
     <ul class="parametrs">
         <p>Состав порции:</p>
-        <li>Вес: <div class="value">{{ product.weight }}</div> грамм</li>
-        <li>Калории: <div class="value">{{ product.calories }}</div> ккал</li>
-        <li>Белки: <div class="value">{{ product.protein }}</div> грамм</li>
-        <li>Жиры: <div class="value">{{ product.fat }}</div> грамм</li>
-        <li>Углеводы: <div class="value">{{ product.carbohydrates }}</div> грамм</li>
+        <li>Вес: <div class="value">{{ product.Dish.weight }}</div> грамм</li>
+        <li>Калории: <div class="value">{{ product.Dish.calories }}</div> ккал</li>
+        <li>Белки: <div class="value">{{ product.Dish.protein }}</div> грамм</li>
+        <li>Жиры: <div class="value">{{ product.Dish.fat }}</div> грамм</li>
+        <li>Углеводы: <div class="value">{{ product.Dish.carbohydrates }}</div> грамм</li>
 
     </ul>
-
-    <div class="description">{{ product.description }}</div>
+    {% include 'inc/_product_btns.html' %}
+    <div class="description">{{ product.Dish.description }}</div>
 </section>
 {% include 'inc/_cart-btn.html' %}
 {% endblock %}

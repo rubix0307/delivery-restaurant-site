@@ -1,0 +1,10 @@
+
+<div class="product_btns">
+    <form method="post" action="{{ url_for('cart.cart_index', product_id=product.Dish.id, action='add') }}">
+        <button type="submit">+</button>
+    </form>
+
+    <form method="post" action="{{ url_for('cart.cart_index', product_id=product.Dish.id, action='remove') }}">
+        <button type="submit">-</button>
+    </form>
+</div>

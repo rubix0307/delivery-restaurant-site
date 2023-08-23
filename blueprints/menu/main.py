@@ -33,7 +33,7 @@ def menu_category(category_slug):
 
 @menu.route('/<category_slug>/<dish_slug>', methods=['GET', 'POST'])
 def menu_dish(category_slug, dish_slug):
-    product = db_session.query(Dish).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
+    product = db_session.query(Dish, Category).join(Category).filter(Category.slug == category_slug, Dish.slug == dish_slug).first()
     context = dict(
         categories=Category.query.all(),
         product=product,
@@ -41,19 +41,19 @@ def menu_dish(category_slug, dish_slug):
 
     if request.method == 'POST':
 
-        product.name = request.form.get('name', product.name)
-        product.name_normal = get_normal_form(product.name)
-        product.slug = create_slug(product.name)
-        product.price = request.form.get('price', product.price)
-        product.description = request.form.get('description', product.description)
-        product.category_id = request.form.get('category_id', product.category_id)
-        product.available = request.form.get('available', product.available)
-        product.photo = request.form.get('photo', product.photo) # save photo and set path
-        product.weight = request.form.get('weight', product.weight)
-        product.calories = request.form.get('calories', product.calories)
-        product.protein = request.form.get('protein', product.protein)
-        product.fat = request.form.get('fat', product.fat)
-        product.carbohydrates = request.form.get('carbohydrates', product.carbohydrates)
+        product.Dish.name = request.form.get('name', product.Dish.name)
+        product.Dish.name_normal = get_normal_form(product.Dish.name)
+        product.Dish.slug = create_slug(product.Dish.name)
+        product.Dish.price = request.form.get('price', product.Dish.price)
+        product.Dish.description = request.form.get('description', product.Dish.description)
+        product.Dish.category_id = request.form.get('category_id', product.Dish.category_id)
+        product.Dish.available = request.form.get('available', product.Dish.available)
+        product.Dish.photo = request.form.get('photo', product.Dish.photo) # save photo and set path
+        product.Dish.weight = request.form.get('weight', product.Dish.weight)
+        product.Dish.calories = request.form.get('calories', product.Dish.calories)
+        product.Dish.protein = request.form.get('protein', product.Dish.protein)
+        product.Dish.fat = request.form.get('fat', product.Dish.fat)
+        product.Dish.carbohydrates = request.form.get('carbohydrates', product.Dish.carbohydrates)
 
         db_session.commit()
 

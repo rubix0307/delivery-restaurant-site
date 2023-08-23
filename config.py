@@ -10,6 +10,6 @@ app_config = dict(
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     UPLOAD_FOLDER='uploads',
 )
-
+MAX_ORDER_QUANTITY = 10
 
 
