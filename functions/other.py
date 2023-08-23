@@ -16,12 +16,12 @@ def get_user_cart_orders():
         .join(Category).filter(Dish.category_id == Category.id)\
         .all()
     order_total = db_session.query(
-        func.sum(Dish.price).label("price"),
-        func.sum(Dish.weight).label("weight"),
-        func.sum(Dish.calories).label("calories"),
-        func.sum(Dish.protein).label("protein"),
-        func.sum(Dish.fat).label("fat"),
-        func.sum(Dish.carbohydrates).label("carbohydrates")
+        func.sum(Dish.price * OrderDish.quantity).label("price"),
+        func.sum(Dish.weight * OrderDish.quantity).label("weight"),
+        func.sum(Dish.calories * OrderDish.quantity).label("calories"),
+        func.sum(Dish.protein * OrderDish.quantity).label("protein"),
+        func.sum(Dish.fat * OrderDish.quantity).label("fat"),
+        func.sum(Dish.carbohydrates * OrderDish.quantity).label("carbohydrates")
     ).join(OrderDish).filter(OrderDish.order_id == cart.id, OrderDish.user_id == user.get('id')).first()
 
     return user, cart, order, order_total

@@ -8,6 +8,7 @@ from config import MAX_ORDER_QUANTITY
 from functions.db import db_session, OrderDish, UserAddress, Dish, Category, Order
 from functions.decorators import login_required
 from functions.other import get_user_cart_orders
+from functions.send_email import SendEmail
 
 cart = Blueprint('cart', __name__, template_folder='templates')
 
@@ -65,10 +66,10 @@ def cart_index():
 @login_required()
 def cart_order():
     user, cart, order, order_total = get_user_cart_orders()
-    address_id = request.form.get('address_id')
+    address = UserAddress.query.filter_by(id=request.form.get('address_id')).first()
 
     cart.status_id = 2
-    cart.address_id = address_id
+    cart.address_id = address.id
     cart.price = order_total.price
     cart.calories = order_total.calories
     cart.protein = order_total.protein
@@ -78,5 +79,14 @@ def cart_order():
     cart.timestamp = datetime.fromtimestamp(time.time())
 
     db_session.commit()
+
+    email_data = dict(
+        subject='Заказ принят | Вилки-Палки',
+        receiver_email=user.get('email'),
+        message_html=render_template('update_order_status.html', cart=cart, order=order, order_total=order_total, address=address),
+    )
+
+    with SendEmail(**email_data) as email:
+        is_send = email.send()
 
     return redirect(url_for('menu.menu_index')) # update: redirect to order

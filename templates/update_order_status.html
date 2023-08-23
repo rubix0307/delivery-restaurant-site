@@ -11,11 +11,50 @@
 </div>
 
 <div>
-    <div class="title">Ваш заказ №1</div>
+    <div class="title">Ваш заказ №{{ cart.id }} принят</div>
     <ul>
-        {% for product, quantity in order %}
-            <li>{{ product.name }} x {{ quantity }}</li>
+        {% for product in order %}
+            <li>
+                <a href="{{ url_for('menu.menu_dish', category_slug=product.Category.slug, dish_slug=product.Dish.slug) }}">
+                    {{ product.Dish.name }} x{{ product.OrderDish.quantity }}
+                </a>
+                <div>#{{ product.Category.name }}</div>
+                <div>Цена: {{ product.Dish.price }} UAH</div>
+                {% if product.OrderDish.quantity > 1 %}
+                    <div>Всего: {{ product.Dish.price * product.OrderDish.quantity }} UAH</div>
+                {% endif %}
+            </li>
+            <br>
         {% endfor %}
     </ul>
-    Отправлен службой доставки
+    <div>Вес: {{ order_total.weight }} грамм</div>
+    <div>Ценность: {{ order_total.calories }} ккал</div>
+    <div>Белков: {{ order_total.protein }} грамм</div>
+    <div>Жиров: {{ order_total.fat }} грамм</div>
+    <div>Углеводов: {{ order_total.carbohydrates }} грамм</div>
+    <br>
+    <div>Всего: {{ order_total.price }} UAH</div>
+    <br>
+    <br>
+    {% if cart.comment %}
+        <div>Комментарий к заказу:</div>
+        <div>{{ cart.comment }}</div>
+    {% endif %}
+    <br>
+    <br>
+    <div>Как заказ будет готов, курьер привезёт его по адресу:</div>
+    <div>
+        {{ address.city }},{{ address.street }} {{ address.house }}
+        {% if address.apartment %}
+        | Квартира: {{ address.apartment }}
+        {% endif %}
+
+        {% if address.entrance %}
+        | Подъезд: {{ address.entrance }}
+        {% endif %}
+
+        {% if address.floor %}
+        | Этаж: {{ address.floor }}
+        {% endif %}
+    </div>
 </div>
