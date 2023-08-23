@@ -55,6 +55,7 @@ class User(Base):
     name = Column(String(100), nullable=False)
     phone = Column(String(15), nullable=False)
     email = Column(String(100), nullable=False)
+    email_verification = Column(Boolean, default=0)
     salt = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
     telegram_id = Column(String(50))
@@ -80,6 +81,20 @@ class UserAddress(Base):
 
     def __str__(self):
         return f'<UserAddress {self.id}>'
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class UserVerification(Base):
+    __tablename__ = 'user_verification'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    code = Column(Integer, nullable=False)
+    timestamp = Column(TIMESTAMP)
+
+    def __str__(self):
+        return f'<UserVerification {self.id}>'
 
     def __repr__(self):
         return self.__str__()
