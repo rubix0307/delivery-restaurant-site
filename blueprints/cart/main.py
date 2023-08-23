@@ -47,7 +47,7 @@ def cart_index():
                     ))
 
             db_session.commit()
-            return redirect(request.referrer)
+            return redirect(request.referrer) # in next updates add ajax
 
     context = dict(
         order=order,
