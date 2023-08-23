@@ -8,8 +8,8 @@ from functions.db import *
 
 
 def get_user_cart_orders():
-    user = session.get('user')
-    cart = get_or_create(Order, dict(user_id=user.get('id'), status_id=1))
+    user: dict = session.get('user')
+    cart: Order = get_or_create(Order, dict(user_id=user.get('id'), status_id=1))
 
     order: Row[Dish, Category, OrderDish] = db_session.query(Dish, Category, OrderDish)\
         .join(OrderDish).filter(OrderDish.order_id == cart.id, OrderDish.user_id == user.get('id'))\
