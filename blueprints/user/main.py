@@ -160,6 +160,7 @@ def user_order_id(order_id):
 def user_address_list():
     context = dict(
         title='Твои адреса',
+        next=request.args.get('next'),
     )
 
     if request.method == 'POST':
@@ -182,6 +183,10 @@ def user_address_list():
             )
             db_session.add(new_address)
             db_session.commit()
+
+            if context.get('next'):
+                return redirect(context.get('next'))
+
         else:
             flash('Вы ввели не все обязательные поля', 'error')
             context.update(**request.form)

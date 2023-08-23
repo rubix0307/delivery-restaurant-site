@@ -114,7 +114,7 @@ class Order(Base):
     __tablename__ = 'order'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    address_id = Column(Integer, ForeignKey('address.id'), nullable=False)
+    address_id = Column(Integer, ForeignKey('user_address.id'), nullable=False)
     status_id = Column(Integer, ForeignKey('order_status.id'), nullable=False)
     price = Column(Float, nullable=False)
     calories = Column(Float)

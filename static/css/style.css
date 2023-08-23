@@ -609,6 +609,11 @@ section.forms form .row {
     padding: 0;
 
 }
+.current_order .cart-products a{
+    color: var(--main-color);
+    text-decoration: none;
+
+}
 
 .current_order .cart-products .cart-product{
     list-style: none;
@@ -655,6 +660,50 @@ section.forms form .row {
     max-height: 50px;
 
 }
+
+
+
+.product_btns {
+    display: flex;
+    justify-content: space-around;
+}
+.product_btns form button{
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: var(--main-bg-color);
+    background-color: var(--tertiary-bg-color);
+    border: 2px var(--tertiary-bg-color-hover) solid;
+}
+
+
+
+.make-order {
+    display: flex;
+    flex-direction: column;
+}
+.make-order select{
+    border-radius: 10px;
+    height: 30px;
+    padding-left: 10px;
+}
+.make-order textarea {
+    border-radius: 10px;
+    height: 50px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.submit {
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 30px;
+    color: var(--main-bg-color);
+    background-color: var(--tertiary-bg-color);
+    border: 2px var(--tertiary-bg-color-hover) solid;
+}
+
 
 @media only screen and (max-width: 880px) {
     header .part .logo {

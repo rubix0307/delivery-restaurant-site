@@ -1,7 +1,11 @@
-from flask import Blueprint, render_template, request, redirect
+import time
+from datetime import datetime
+
+from flask import Blueprint, render_template, request, redirect, url_for
+from sqlalchemy import func
 
 from config import MAX_ORDER_QUANTITY
-from functions.db import db_session, OrderDish
+from functions.db import db_session, OrderDish, UserAddress, Dish, Category, Order
 from functions.decorators import login_required
 from functions.other import get_user_cart_orders
 
@@ -11,7 +15,7 @@ cart = Blueprint('cart', __name__, template_folder='templates')
 @cart.route('/', methods=['GET', 'POST'])
 @login_required()
 def cart_index():
-    user, cart, order = get_user_cart_orders()
+    user, cart, order, order_total = get_user_cart_orders()
 
     if request.method == 'POST':
         dish_id = request.args.get('product_id')
@@ -50,7 +54,9 @@ def cart_index():
             return redirect(request.referrer) # in next updates add ajax
 
     context = dict(
+        cart=cart,
         order=order,
+        user_address_list=UserAddress.query.filter_by(user_id=user.get('id')).all(),
     )
     return render_template('cart/cart.html', **context)
 
@@ -58,5 +64,19 @@ def cart_index():
 @cart.route('/order', methods=['POST'])
 @login_required()
 def cart_order():
-    # Обновить статус заказа
-    return
+    user, cart, order, order_total = get_user_cart_orders()
+    address_id = request.form.get('address_id')
+
+    cart.status_id = 2
+    cart.address_id = address_id
+    cart.price = order_total.price
+    cart.calories = order_total.calories
+    cart.protein = order_total.protein
+    cart.fat = order_total.fat
+    cart.carbohydrates = order_total.carbohydrates
+    cart.comment = request.form.get('comment','')
+    cart.timestamp = datetime.fromtimestamp(time.time())
+
+    db_session.commit()
+
+    return redirect(url_for('menu.menu_index')) # update: redirect to order
