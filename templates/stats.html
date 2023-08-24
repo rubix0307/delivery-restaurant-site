@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+</head>
+<body>
+    <h2>За день</h2>
+    <div>Заказов: {{ order_stats.total_orders }}</div>
+    <div>Средняя цена: {{ order_stats.average_order_price }}</div>
+
+
+    <h2>Заказанные блюда</h2>
+    <ul>
+        {% for d_ordered in total_dishes_ordered %}
+            <li>{{ d_ordered.Dish.name }} x{{ d_ordered.total_quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Собранные, но не заказанные корзины: {{ basket_count.count }}</h3>
+    <h3>Новые пользователи: {{ users_count.count }}</h3>
+    <h3>Новые пользователи, которые заказали: {{ registered_and_ordered_users_count.count }}</h3>
+
+</body>
+</html>

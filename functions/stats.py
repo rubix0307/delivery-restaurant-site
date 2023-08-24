@@ -9,7 +9,7 @@ def get_stats(day=date.today()):
     check_day = datetime.combine(day, datetime.min.time())
 
     total_dishes_ordered = (
-        db_session.query(Dish.name, func.sum(OrderDish.quantity).label('total_quantity'))
+        db_session.query(Dish, func.sum(OrderDish.quantity).label('total_quantity'))
         .join(OrderDish, Dish.id == OrderDish.dish_id)
         .join(Order, OrderDish.order_id == Order.id)
         .filter(Order.timestamp >= check_day)
