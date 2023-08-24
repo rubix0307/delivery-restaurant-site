@@ -50,6 +50,7 @@ def cart_index():
                         quantity=1,
                         user_id=user['id'],
                     ))
+            cart.timestamp = datetime.fromtimestamp(time.time())
 
             db_session.commit()
             return redirect(request.referrer) # in next updates add ajax
