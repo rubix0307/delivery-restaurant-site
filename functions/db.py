@@ -1,3 +1,6 @@
+import time
+from datetime import datetime
+
 from sqlalchemy import create_engine, MetaData, Column, Integer, String, Float, Text, Boolean, ForeignKey, TIMESTAMP
 from config import app_config
 from sqlalchemy.ext.declarative import declarative_base
@@ -59,6 +62,7 @@ class User(Base):
     salt = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
     telegram_id = Column(String(50))
+    timestamp = Column(TIMESTAMP, nullable=False, default=datetime.fromtimestamp(time.time()))
     role_id = Column(Integer, ForeignKey('user_role.id'), nullable=False, default=1)
 
     def __str__(self):
