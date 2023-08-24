@@ -2,7 +2,26 @@
 
 {% block content %}
     <section class="user-profile">
+    {% if get_flashed_messages() %}
+        <ul class="form-messages">
+          {% for category, message in get_flashed_messages(True) %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+
     <h1>{{ title }}</h1>
+
+        {% if user.email_verification == 0 %}
+            <form class="data-form" method="post" action="{{ url_for('user.user_email_verification') }}">
+                <h2>Подтверди почту</h2>
+                <label for="code">Код:</label>
+                <input type="text" name="code" placeholder="Введи код отправленный на почту">
+                <button>Подтвердить</button>
+            </form>
+            <br>
+        {% endif %}
+
         <form class="data-form" method="post" action="{{ url_for('user.user_index') }}">
 
             <label class='profile-name' for="name">Тебя зовут:</label>

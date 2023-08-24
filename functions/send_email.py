@@ -1,7 +1,14 @@
 import os
+import secrets
 import smtplib
+import time
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from flask import render_template
+
+from functions.db import User, get_or_create, UserVerification, db_session
 
 
 class SendEmail:
@@ -10,7 +17,7 @@ class SendEmail:
         self.sender_email = os.environ['SENDER_EMAIL']
         self.sender_password = os.environ['SENDER_PASSWORD']
         self.receiver_email = receiver_email
-        self.subject = subject
+        self.subject = subject.strip() + ' | Вилки-Палки'
         self.message_html = message_html
 
         self.server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
@@ -37,3 +44,17 @@ class SendEmail:
             return False
 
 
+def send_verification_code(user: User):
+
+    user_verify = get_or_create(UserVerification, filters=dict(user_id=user.id))
+    user_verify.code = secrets.token_hex(3)
+    user_verify.timestamp = datetime.fromtimestamp(time.time())
+    db_session.commit()
+
+    email_data = dict(
+        subject='Подтверждение почты',
+        receiver_email=user.email,
+        message_html=render_template('email_verification.html', code=user_verify.code),
+    )
+    with SendEmail(**email_data) as email:
+        is_send = email.send()

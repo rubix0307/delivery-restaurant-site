@@ -55,6 +55,7 @@ def cart_index():
             return redirect(request.referrer) # in next updates add ajax
 
     context = dict(
+        user=user,
         cart=cart,
         order=order,
         user_address_list=UserAddress.query.filter_by(user_id=user.get('id')).all(),
@@ -81,7 +82,7 @@ def cart_order():
     db_session.commit()
 
     email_data = dict(
-        subject='Заказ принят | Вилки-Палки',
+        subject='Заказ принят',
         receiver_email=user.get('email'),
         message_html=render_template('update_order_status.html', cart=cart, order=order, order_total=order_total, address=address),
     )

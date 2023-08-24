@@ -23,40 +23,45 @@
                 {% endfor %}
             </ul>
 
-            {% if user_address_list %}
-                <h2>Выберите адрес доставки</h2>
-                <form method="post" action="{{ url_for('cart.cart_order') }}" class="make-order">
-                    <select name="address_id" required>
-                        {% for address in user_address_list %}
-                            <option value="{{ address.id }}">
-                                <div>{{ address.city }},</div>
-                                <div>{{ address.street }}</div>
-                                <div>{{ address.house }}</div>
 
-                                {% if address.apartment %}
-                                    <div>| Квартира: {{ address.apartment }}</div>
-                                {% endif %}
+            {% if user.email_verification %}
+                {% if user_address_list %}
+                    <h2>Выберите адрес доставки</h2>
+                    <form method="post" action="{{ url_for('cart.cart_order') }}" class="make-order">
+                        <select name="address_id" required>
+                            {% for address in user_address_list %}
+                                <option value="{{ address.id }}">
+                                    <div>{{ address.city }},</div>
+                                    <div>{{ address.street }}</div>
+                                    <div>{{ address.house }}</div>
 
-                                {% if address.entrance %}
-                                    <div>| Подъезд: {{ address.entrance }}</div>
-                                {% endif %}
+                                    {% if address.apartment %}
+                                        <div>| Квартира: {{ address.apartment }}</div>
+                                    {% endif %}
 
-                                {% if address.floor %}
-                                    <div>| Этаж: {{ address.floor }}</div>
-                                {% endif %}
+                                    {% if address.entrance %}
+                                        <div>| Подъезд: {{ address.entrance }}</div>
+                                    {% endif %}
 
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <textarea name="comment" id="comment" placeholder="Комментарий к заказу"></textarea>
-                    <button type="submit" class="submit">Сделать заказ!</button>
-                </form>
+                                    {% if address.floor %}
+                                        <div>| Этаж: {{ address.floor }}</div>
+                                    {% endif %}
 
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <textarea name="comment" id="comment" placeholder="Комментарий к заказу"></textarea>
+                        <button type="submit" class="submit">Сделать заказ!</button>
+                    </form>
+
+                {% else %}
+                    <h2>У вас нет адреса доставки</h2>
+                    <a href="{{ url_for('user.user_address_list', next=url_for('cart.cart_index')) }}" class="submit">Добавить</a>
+                {% endif %}
             {% else %}
-                <h2>У вас нет адреса доставки</h2>
-                <a href="{{ url_for('user.user_address_list', next=url_for('cart.cart_index')) }}" class="submit">Добавить</a>
+                <h2>Подтверди почту для создания заказа</h2>
+                <a href="{{ url_for('user.user_index') }}">Подтвердить</a>
             {% endif %}
-
 
         {% else %}
             <h3 style="text-align: center;">пустая</h3>

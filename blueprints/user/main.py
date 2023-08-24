@@ -1,11 +1,15 @@
 import json
 import re
-
+import secrets
+import time
+from datetime import datetime, timedelta
+import random
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 
 from functions.decorators import login_required, logout_required
-from functions.db import UserAddress, User, Order, db_session
+from functions.db import UserAddress, User, Order, db_session, UserVerification
 from functions.edit_text import BcryptPasswordManager
+from functions.send_email import SendEmail, send_verification_code
 
 user = Blueprint('user', __name__)
 
@@ -55,7 +59,7 @@ def user_register():
             return render_template('register.html', **context)
 
         salt, hashed_password = BcryptPasswordManager(password1).hash_password()
-        new_user = User(
+        user = User(
             name=name,
             phone=phone,
             email=email,
@@ -63,8 +67,10 @@ def user_register():
             password=hashed_password,
             role_id=1,
         )
-        db_session.add(new_user)
+        db_session.add(user)
         db_session.commit()
+
+        send_verification_code(user)
 
         flash('Вы успешно зарегистрированы', 'success')
         return render_template('login.html', **context)
@@ -113,6 +119,29 @@ def user_login():
 def user_logout():
     del session['user']
     return redirect(url_for('menu.menu_index'))
+
+
+@user.route('/email_verification', methods=['POST'])
+@login_required()
+def user_email_verification():
+    user = User.query.filter_by(id=session['user'].get('id')).first()
+    user_verify = UserVerification.query.filter_by(user_id=user.id).first()
+
+    code = request.form.get('code')
+
+    if (datetime.now() - user_verify.timestamp) <= timedelta(minutes=10):
+        if user_verify.code == code and code:
+            flash('Почта подтверждена', 'success')
+            session['user']['email_verification'] = 1
+            user.email_verification = 1
+            db_session.commit()
+        else:
+            flash('Код не совпадает', 'error')
+    else:
+        send_verification_code(user)
+        flash('Срок действия кода истек. Мы отправили вам новое письмо.', 'error')
+
+    return redirect(url_for('user.user_index'))
 
 
 @user.route('/restore', methods=['GET', 'POST'])

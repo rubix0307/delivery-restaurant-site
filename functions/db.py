@@ -90,8 +90,8 @@ class UserVerification(Base):
     __tablename__ = 'user_verification'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    code = Column(Integer, nullable=False)
-    timestamp = Column(TIMESTAMP)
+    code = Column(String(6), nullable=True)
+    timestamp = Column(TIMESTAMP, nullable=True)
 
     def __str__(self):
         return f'<UserVerification {self.id}>'
@@ -129,7 +129,7 @@ class Order(Base):
     __tablename__ = 'order'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    address_id = Column(Integer, ForeignKey('user_address.id'), nullable=False)
+    address_id = Column(Integer, ForeignKey('user_address.id'), nullable=True)
     status_id = Column(Integer, ForeignKey('order_status.id'), nullable=False)
     price = Column(Float, nullable=False)
     calories = Column(Float)
@@ -188,11 +188,14 @@ class UserRole(Base):
         return self.__str__()
 
 
-def get_or_create(model, filters):
-    data = model.query.filter_by(**filters).first()
+def get_or_create(model, filters, select_filters=None):
+    if not select_filters:
+        select_filters = filters
+
+    data: model = model.query.filter_by(**select_filters).first()
 
     if not data:
-        data = model(**filters)
+        data: model = model(**filters)
         db_session.add(data)
         db_session.commit()
 
