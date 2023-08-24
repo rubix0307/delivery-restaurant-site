@@ -132,7 +132,7 @@ def user_email_verification():
     if (datetime.now() - user_verify.timestamp) <= timedelta(minutes=10):
         if user_verify.code == code and code:
             flash('Почта подтверждена', 'success')
-            session['user']['email_verification'] = 1
+            session['user'].update(dict(email_verification=1))
             user.email_verification = 1
             db_session.commit()
         else:
