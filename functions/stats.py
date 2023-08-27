@@ -1,5 +1,5 @@
 from datetime import datetime, date
-from sqlalchemy import func
+from sqlalchemy import func, distinct
 from functions.db import Dish, User, Order, OrderDish, db_session
 
 
@@ -43,7 +43,7 @@ def get_stats(day=date.today()):
     )
 
     registered_and_ordered_users_count = (
-        db_session.query(func.count(User.id).label('count'))
+        db_session.query(distinct(func.count(User.id).label('count')))
         .join(Order, User.id == Order.user_id)
         .filter(User.timestamp >= check_day)
         .filter(Order.status_id != cart_status_id)
