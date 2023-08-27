@@ -7,7 +7,7 @@ from functions.db import Category, Dish, db_session
 from functions.edit_text import get_normal_form, create_slug
 from functions.other import get_user_cart_orders
 from functions.send_email import SendEmail
-menu = Blueprint('menu', __name__)
+menu = Blueprint('', __name__)
 
 
 @menu.route('/', methods=['GET'])
