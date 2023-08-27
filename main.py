@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 
 import config
-from functions.db import *
 from blueprints import admin, menu, user, cart
 
 
