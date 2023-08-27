@@ -1,0 +1,6 @@
+<form class="data-form" method="post" action="{{ url_for('user.user_email_verification') }}">
+    <h2>Подтверди почту</h2>
+    <label for="code">Код:</label>
+    <input type="text" name="code" placeholder="Введи код отправленный на почту">
+    <button>Подтвердить</button>
+</form>

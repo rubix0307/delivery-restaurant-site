@@ -13,12 +13,7 @@
     <h1>{{ title }}</h1>
 
         {% if user.email_verification == 0 %}
-            <form class="data-form" method="post" action="{{ url_for('user.user_email_verification') }}">
-                <h2>Подтверди почту</h2>
-                <label for="code">Код:</label>
-                <input type="text" name="code" placeholder="Введи код отправленный на почту">
-                <button>Подтвердить</button>
-            </form>
+            {% include 'inc/_email_verification_form.html' %}
             <br>
         {% endif %}
 
