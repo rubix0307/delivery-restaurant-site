@@ -101,6 +101,7 @@ def user_login():
                     name=search_user.name,
                     phone=search_user.phone,
                     email=search_user.email,
+                    email_verification=search_user.email_verification,
                     telegram_id=search_user.telegram_id,
                     role_id=search_user.role_id,
                 )
