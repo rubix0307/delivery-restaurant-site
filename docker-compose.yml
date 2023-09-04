@@ -19,3 +19,17 @@ services:
       - "8080:80"
     environment:
       - PMA_ARBITRARY=1
+
+  rabbit_mq:
+    hostname: rabbit_mq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file: .env
+
+  celery_worker:
+    build: .
+    command: celery -A celery_task.celery worker --loglevel=info --pool=solo
+    environment:
+      - rabbit_host=rabbit_mq
