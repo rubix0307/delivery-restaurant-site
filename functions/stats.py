@@ -57,7 +57,3 @@ def get_stats(day=date.today()):
         users_count=users_count,
         registered_and_ordered_users_count=registered_and_ordered_users_count,
     )
-
-
-
-
