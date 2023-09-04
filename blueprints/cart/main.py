@@ -2,13 +2,12 @@ import time
 from datetime import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for
-from sqlalchemy import func
 
+from celery_task import send_mail
 from config import MAX_ORDER_QUANTITY
-from functions.db import db_session, OrderDish, UserAddress, Dish, Category, Order
+from functions.db import db_session, OrderDish, UserAddress
 from functions.decorators import login_required
 from functions.other import get_user_cart_orders
-from functions.send_email import SendEmail
 
 cart = Blueprint('cart', __name__, template_folder='templates')
 
@@ -82,13 +81,9 @@ def cart_order():
 
     db_session.commit()
 
-    email_data = dict(
+    send_mail.delay(dict(
         subject='Заказ принят',
         receiver_email=user.get('email'),
         message_html=render_template('update_order_status.html', cart=cart, order=order, order_total=order_total, address=address),
-    )
-
-    with SendEmail(**email_data) as email:
-        is_send = email.send()
-
+    ))
     return redirect(url_for('menu.menu_index')) # update: redirect to order
