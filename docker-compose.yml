@@ -30,6 +30,6 @@ services:
 
   celery_worker:
     build: .
-    command: celery -A celery_task.celery worker --loglevel=info --pool=solo
+    command: celery -A celery_task.celery worker --loglevel=info --pool=solo -B
     environment:
       - rabbit_host=rabbit_mq
